@@ -1,0 +1,38 @@
+---
+description: Mobile responsiveness audit. Activates on any layout/typography change or when user mentions mobile/responsive/phone.
+globs: ["**/*.html", "**/*.css", "**/*.scss", "**/*.tsx", "**/*.jsx", "**/*.vue", "**/*.svelte", "**/*.module/**"]
+alwaysApply: false
+---
+
+# Mobile Responsiveness Audit (Cursor rule)
+
+After any change to layout, typography, spacing, navigation, forms, or grid/flex/positioning code, mentally run the 12-point mobile check.
+
+**Critical fails (stop and fix):**
+1. Missing `<meta name="viewport" content="width=device-width,initial-scale=1">`
+2. Horizontal scroll on `<body>` at any breakpoint from 320 to 768
+
+**Then verify:**
+- Container gutters consistent (≥1rem on phones)
+- Body text ≥16px (prevents iOS auto-zoom)
+- Tap targets ≥44×44 CSS px, ≥8px gap
+- Forms: inputs 16px+, type-specific inputmode, submit reachable above keyboard
+- Nav: hamburger functional, sticky header doesn't cover anchor scroll
+- Images/videos/iframes: max-width:100% + responsive aspect wrapper
+- Tables: wrapped in `overflow-x:auto` when wide
+- Fixed/sticky elements don't block content or each other
+- Modals: focus trap + Escape + tap-outside close
+- Honor `prefers-reduced-motion`
+
+**Default breakpoint ladder:** 320, 375, 390, 414, 600, 768, 820. Never skip 320.
+
+**Output format (when reporting issues):** Group by severity (Critical / Warnings / Polish), each entry states: breakpoint(s), symptom, root cause, fix.
+
+**Anti-patterns to call out immediately:**
+- `display:none` hiding real content from mobile users
+- Body copy under 16px
+- `position:fixed; bottom:0` without `env(safe-area-inset-bottom)`
+- Mobile nav using `position:absolute`
+- Tables wider than viewport with no scroll wrapper
+
+Never report "passes mobile" without listing which breakpoints + pages were checked.
